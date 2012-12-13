@@ -7,16 +7,15 @@ https://github.com/atuballas/codes
 
 /*
 Class Constructor
-@Param:
-field - field name
-value - value of the field
-type - type of validation
+@Param:none
 */
-function Validator( field, value, validations ){
+function Validator(){
+	
+	this.field = '';
+	this.value = '';
+	this.validations = '';
+
 	this.debug = true;
-	this.field = field;
-	this.value = value;
-	this.validations = validations;
 	this.result = true;
 	this.lang = new Array(
 											'Validation Error: 3rd parameter expects an object.',
@@ -30,10 +29,17 @@ function Validator( field, value, validations ){
 /*
 Function; validate()
 Generic function that calls/executes individual validation type
-@Param: none
+@Param: 
+field - field name
+value - value of the field
+type - type of validation
 @Return: boolean(true/false)
 */
-Validator.prototype.validate = function(){
+Validator.prototype.validate = function( field, value, validations ){
+
+	this.field = field;
+	this.value = value;
+	this.validations = validations;
 
 	if( typeof(this.validations) == 'object' ){
 		for(var key in this.validations){
