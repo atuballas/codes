@@ -11,6 +11,40 @@ runLightbox(a,b)
 where:
 a - id of div element as content to insert in lightbox
 b - lightbox width
+
+
+sample:
+
+css:
+div.lightbox-content{
+	display:none;
+	font-family:Calibri;
+	font-size:12px;
+	background-color:#efefef;
+	border:1px solid #ccc;
+	margin:0 auto;
+	text-align:center;
+	padding:5px;
+	border-radius:5px;
+}
+
+html:
+<div id="addboarder-loader">
+	<div class="lightbox-content">
+		<!-- you lightbox content place here -->
+	</div>
+</div>
+
+javascript:
+a. inline call:
+<a class="lightbox" lightbox="addboarder-loader" lightbox-width="100" />Click here to show lightbox</a>
+
+b. function call
+<script>
+function showlightbox(){
+	runLightbox('addboarder-loader',100);
+}
+</script>
 */
 
 $(document).ready(function(){
