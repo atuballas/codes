@@ -1,0 +1,5 @@
+>> To capitalize first string character in Javascript
+function ucfirst(a){
+	return a.slice(0,1).toUpperCase() + a.substring(1);
+}
+
