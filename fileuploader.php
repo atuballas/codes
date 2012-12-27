@@ -45,8 +45,6 @@ echo $oFileUpload->getUploadStatusDescription();
 class FileUploader{
 	
 	private $benchmark = true;
-	private $benchmark_elapsed_time;
-
 	private $input_name;
 	private $new_filename = false;
 	private $upload_status = true;
