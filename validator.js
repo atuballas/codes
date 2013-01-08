@@ -7,10 +7,10 @@ https://github.com/atuballas/codes
 
 /*
 Class Constructor
-@Param:none
+@Param: none
 */
-function Validator(){
-	
+function Validator(  ){
+
 	this.field = '';
 	this.value = '';
 	this.validations = '';
@@ -29,43 +29,47 @@ function Validator(){
 /*
 Function; validate()
 Generic function that calls/executes individual validation type
-@Param: 
+@Param:
 field - field name
 value - value of the field
 type - type of validation
 @Return: boolean(true/false)
 */
-Validator.prototype.validate = function( field, value, validations ){
+Validator.prototype.validate = function( field, value, validations, errelement, errtexts ){
 
 	this.field = field;
 	this.value = value;
 	this.validations = validations;
-
+	this.errelement = errelement;
+	this.errtexts = errtexts;
+	
 	if( typeof(this.validations) == 'object' ){
 		for(var key in this.validations){
-			if(!this.validations.hasOwnProperty(key)){
-				continue;
+			if(this.result){
+				if(!this.validations.hasOwnProperty(key)){
+					continue;
+				}
+
+				this.key = key;
+				this.kvalue = this.validations[key];
+
+				switch( key ){
+					case 'required':
+						this.required();
+					break;
+					case 'minLength':
+						this.minLength();
+					break;
+					case 'maxLength':
+						this.maxLength();
+					break;
+					case 'pattern':
+						this.pattern();
+					break;
+				}	
 			}
-			
-			this.key = key;
-			this.kvalue = this.validations[key];
-			
-			switch( key ){
-				case 'required':
-					this.required();
-				break;
-				case 'minLength':
-					this.minLength();
-				break;
-				case 'maxLength':
-					this.maxLength();
-				break;
-				case 'valid':
-					this.valid();
-				break;
-			}	
-			
 		}
+		this.result = true;
 	}else{
 		if(this.debug) console.log(this.lang[0]);
 		return false;
@@ -79,10 +83,12 @@ Checks if value of field is not empty and must have a value
 @Return: boolean(true/false)
 */
 Validator.prototype.required = function(){
+	this.defaultElement();
 	if(this.kvalue==''){
 		if(this.value==''){
 			this.result=false;
-			document.getElementById(this.field).className='inputerror';
+			if(!this.hasClass(document.getElementById(this.field),'inputerror')) document.getElementById(this.field).className+=' inputerror';
+			document.getElementById(this.errelement).innerHTML = this.errtexts['required'];
 		}
 	}else{
 		console.log(this.lang[1]);
@@ -97,9 +103,12 @@ Checks if value of the field passes to a minimum length
 @Return: boolean(true/false)
 */
 Validator.prototype.minLength = function(){
+	this.defaultElement();
 	if(this.kvalue!=''){
 		if(this.value.length<this.kvalue){
 			this.result = false;
+			if(!this.hasClass(document.getElementById(this.field),'inputerror')) document.getElementById(this.field).className+=' inputerror';
+			document.getElementById(this.errelement).innerHTML = this.errtexts['minLength'];
 		}
 	}else{
 		console.log(this.lang[2]);
@@ -108,15 +117,18 @@ Validator.prototype.minLength = function(){
 }
 
 /*
-Function; minLength()
+Function; maxLength()
 Checks if value of the field passes to a maximum length
 @Param: none
 @Return: boolean(true/false)
 */
 Validator.prototype.maxLength = function(){
+	this.defaultElement();
 	if(this.kvalue!=''){
 		if(this.value.length>this.kvalue){
 			this.result = false;
+			if(!this.hasClass(document.getElementById(this.field),'inputerror')) document.getElementById(this.field).className+=' inputerror';
+			document.getElementById(this.errelement).innerHTML = this.errtexts['maxLength'];
 		}
 	}else{
 		console.log(this.lang[3]);
@@ -125,18 +137,31 @@ Validator.prototype.maxLength = function(){
 }
 
 /*
-Function; minLength()
+Function; valid()
 Checks if value of the field is valid based on a regex passed
 @Param: none
 @Return: boolean(true/false)
 */
-Validator.prototype.valid = function(){
+Validator.prototype.pattern = function(){
+	this.defaultElement();
 	if(this.kvalue!=''){
 		if(! this.kvalue.test(this.value)){
 			this.result=false;
+			if(!this.hasClass(document.getElementById(this.field),'inputerror')) document.getElementById(this.field).className+=' inputerror';
+			document.getElementById(this.errelement).innerHTML = this.errtexts['pattern'];	
 		}
 	}else{
 		console.log(this.lang[4]);
 		this.result=false;
 	}
+}
+
+Validator.prototype.hasClass = function(e,c){
+	var r = new RegExp('\\b' + c + '\\b');
+    return r.test(e.className);
+}
+
+Validator.prototype.defaultElement = function(){
+	document.getElementById(this.errelement).innerHTML = '';
+	document.getElementById(this.field).className = document.getElementById(this.field).className.replace( /(?:^|\s)inputerror(?!\S)/g , '' )
 }
