@@ -53,10 +53,11 @@ $(document).ready(function(){
 	
 	$('.lightbox').each(function(){
 		$(this).bind('click',function(){
+			var hl = $('div#'+$(this).attr('lightbox')+' div.lightbox-content').height();
 			var lcontent = $('#'+$(this).attr('lightbox')).html();
 			insertLightboxContents(lcontent);
-			$('div.lighbox-content').css('width',$(this).attr('lightbox-width'));
-			adjustLightboxVertically();
+			$('div.lightbox-content').css('width',$(this).attr('lightbox-width'));
+			adjustLightboxVertically(hl);
 			showLightbox();
 		});
 	});
@@ -65,9 +66,10 @@ $(document).ready(function(){
 
 function runLightbox(a,b){
 	var lcontent = $('#'+a).html();
+	var hl = $('div#'+a+' div.lightbox-content').height();
 	insertLightboxContents(lcontent);
-	$('div.lighbox-content').css('width',b);
-	adjustLightboxVertically();
+	$('div.lightbox-content').css('width',b);
+	adjustLightboxVertically(hl);
 	showLightbox();
 }
 
@@ -99,7 +101,7 @@ function initLightbox(){
 function showLightbox(){
 	$('#popup-overlay').show();
 	$('#popup-inner').show();
-	$('div#popup-inner div.lighbox-content').show();
+	$('div#popup-inner div.lightbox-content').show();
 }
 
 function hideLightbox(){
@@ -112,7 +114,7 @@ function insertLightboxContents(c){
 	$('#popup-inner').html(c);
 }
 
-function adjustLightboxVertically(){
-	var ptop = ( $(window).height() - $('div.lighbox-content').height() ) / 2;
-	$('div.lighbox-content').css('margin-top', ptop);
+function adjustLightboxVertically(hl){
+	var ptop = ( $(window).height() - hl ) / 2;
+	$('div.lightbox-content').css('margin-top', ptop);
 }
