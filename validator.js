@@ -69,7 +69,9 @@ Validator.prototype.validate = function( field, value, validations, errelement, 
 				}	
 			}
 		}
-		this.result = true;
+		if(this.validations.length>1){
+			this.result = true;
+		}
 	}else{
 		if(this.debug) console.log(this.lang[0]);
 		return false;
